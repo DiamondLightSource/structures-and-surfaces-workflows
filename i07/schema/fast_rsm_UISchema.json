@@ -3,11 +3,11 @@
   "elements": [
     {
       "type": "Control",
-      "scope": "#/properties/expSettings"
+      "scope": "#/properties/exp_setup"
     },
     {
       "type": "Control",
-      "scope": "#/properties/scanNumbers"
+      "scope": "#/properties/scan_number"
     }
   ]
 }
