@@ -1,0 +1,14 @@
+{
+  "type": "object",
+  "properties": {
+    "expSettings": {
+      "type": "string",
+      "title": "Experimental settings"
+    },
+    "scanNumbers": {
+      "type": "integer",
+      "title": "Scan number"
+    }
+  },
+  "required": ["expSettings", "scanNumbers"]
+}
