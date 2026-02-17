@@ -1,0 +1,18 @@
+{
+  "type": "object",
+  "properties": {
+    "exp_setup": {
+      "type": "string",
+      "title": "Experimental settings"
+    },
+    "calc_setup": {
+      "type": "string",
+      "title": "Calculation settings"
+    },
+    "scan_numbers": {
+      "type": "integer",
+      "title": "Scan numbers"
+    }
+  },
+  "required": ["exp_setup", "calc_setup", "scan_numbers"]
+}

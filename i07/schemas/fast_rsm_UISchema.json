@@ -7,7 +7,11 @@
     },
     {
       "type": "Control",
-      "scope": "#/properties/scan_number"
+      "scope": "#/properties/calc_setup"
+    },
+    {
+      "type": "Control",
+      "scope": "#/properties/scan_numbers"
     }
   ]
 }
