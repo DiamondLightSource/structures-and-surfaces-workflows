@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: ClusterWorkflowTemplate
 metadata:
-  name: fast_rsm
+  name: fast_rsm_notebook
   annotations:
     workflows.argoproj.io/title: fast_rsm
     workflows.argoproj.io/description: |
@@ -11,7 +11,7 @@ metadata:
     workflows.diamond.ac.uk/ui-schema: |
       {{- .Files.Get "schema/fast_rsm_UISchema.json" | nindent 6 }}
 spec:
-  entrypoint: ????
+  entrypoint: fast_rsm_notebook
   arguments:
     parameters:
     - name: visitdir
@@ -21,6 +21,8 @@ spec:
           key: data_directory
     - name: exp_setup
       value: /dls/science/groups/das/ExampleData/i07/fast_rsm_example_data/setups/si30563_exp.py
+    - name: calc_setup
+      value: /dls_sw/apps/fast_rsm/v2.1.0/fast_rsm/CLI/i07/example_calc_setup.py
     - name: scan_number
       value: 432196
 
@@ -38,34 +40,48 @@ volumeClaimTemplates:
 ???===========???
 
 templates:
-  - name: fast-rsm-mount-files
+  - name: fast-rsm_mount-files
     script:
-      image: ????fast-rsm image path
+      image: ghcr.io/p-mousley/workflows:dev_v2-2-0
       command: [bash]
       source: |
+        # mount-files
         echo '{{ .Files.Get "notebooks/scriptable_processing.ipynb" | b64enc }}' | base64 -d > /tmp/notebook.ipynb
       volumeMounts:
-      - name: tmp
-        mountPath: /tmp
-  - name: fast-rsm-notebook
-    inputs:
-      parameters:
-      - name: exp_setup
-        value: "{{`{{ workflow.parameters.exp_setup }}`}}"
-      - name: scan_number
-        value: "{{`{{ workflow.parameters.scan_number }}`}}"
+        - name: tmp
+          mountPath: /tmp
+        
+    
+  - name: run_fast-rsm_notebook
     script:
-      image: ????fast-rsm image path
+      image: ghcr.io/p-mousley/workflows:dev_v2-2-0
       env:
       - name: HOME
         value: /tmp
       command: [bash]
       source: |
-        python -m papermill /tmp/notebook.ipynb /tmp/notebook-parametrized.ipynb \
-          -p inpath "{{`{{ workflow.parameters.visitdir }}`}}/scan/i14-{{`{{ inputs.parameters.singleFirst }}`}}.nxs" \
-          -p process_configfile /tmp/config.yaml \
-          -p outpath "{{`{{ inputs.parameters.outputFolder }}`}}/i14-{{`{{ inputs.parameters.singleFirst }}`}}_dpc-phase.nxs" \
-          -p auto_processing False
-        python -m jupyter nbconvert /tmp/notebook-parametrized.ipynb --to notebook --execute --allow-errors --output fast-rsm-notebook --output-dir "{{`{{ inputs.parameters.outputFolder }}`}}"
-        python -m jupyter nbconvert "{{`{{ inputs.parameters.outputFolder }}`}}/dpc-notebook.ipynb" --to html --no-input --output dpc-output --output-dir "{{`{{ inputs.parameters.outputFolder }}`}}"
-      
+          python -m papermill /tmp/notebook.ipynb /tmp/notebook.ipynb \
+            -p exp_file "{{`{{ workflow.parameters.exp_setup }}`}}" \
+            -p scans "{{`{{ workflow.parameters.scan_numbers }}`}}" \
+          python -m nbconvert --allow-errors --to html --output-dir /tmp /tmp/notebook.ipynb
+      volumeMounts:
+      - name: session
+        mountPath: "{{`{{ workflow.parameters.visitdir }}`}}"
+      - name: tmp
+        mountPath: /tmp
+
+    outputs:
+      artifacts:
+        - name: notebook
+          path: /tmp/notebook.html
+          archive:
+            none: {}
+
+  - name: fast_rsm_notebook
+    dag:
+      tasks:
+        - name: setup
+          template: fast-rsm_mount-files
+        - name: run_fast-rsm
+          template: run_fast-rsm_notebook
+          dependencies: [setup]
