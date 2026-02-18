@@ -3,11 +3,11 @@
   "elements": [
     {
       "type": "Control",
-      "scope": "#/properties/exp_setup"
+      "scope": "#/properties/exp_file"
     },
     {
       "type": "Control",
-      "scope": "#/properties/calc_setup"
+      "scope": "#/properties/calc_file"
     },
     {
       "type": "Control",

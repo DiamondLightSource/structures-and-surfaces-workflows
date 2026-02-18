@@ -1,11 +1,11 @@
 {
   "type": "object",
   "properties": {
-    "exp_setup": {
+    "exp_file": {
       "type": "string",
       "title": "Experimental settings"
     },
-    "calc_setup": {
+    "calc_file": {
       "type": "string",
       "title": "Calculation settings"
     },
@@ -14,5 +14,5 @@
       "title": "Scan numbers"
     }
   },
-  "required": ["exp_setup", "calc_setup", "scan_numbers"]
+  "required": ["exp_file", "calc_file", "scan_numbers"]
 }
