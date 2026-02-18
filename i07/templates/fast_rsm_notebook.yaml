@@ -49,6 +49,7 @@ spec:
       volumeMounts:
         - name: tmp
           mountPath: /tmp
+
         
     
   - name: run-fast-rsm-notebook
@@ -69,6 +70,10 @@ spec:
         mountPath: "{{`{{ workflow.parameters.visitdir }}`}}"
       - name: tmp
         mountPath: /tmp
+      - name: exampledata
+        mountPath: /dls/science/groups/das/ExampleData/i07/fast_rsm_example_data/
+      - name: cli
+        mountPath: /dls_sw/apps/fast_rsm/v2.1.0/fast_rsm/CLI/
 
     outputs:
       artifacts:
