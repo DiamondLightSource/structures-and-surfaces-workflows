@@ -26,19 +26,19 @@ spec:
     - name: scan_number
       value: 432196
 
-volumeClaimTemplates:
-- metadata:
-    name: tmp
-  spec:
-    accessModes:
-    - ReadWriteOnce
-    resources:
-      requests:
-        storage: 20Gi
-    storageClassName: netapp
+  volumeClaimTemplates:
+  - metadata:
+      name: tmp
+    spec:
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: 20Gi
+      storageClassName: netapp
 
 
-templates:
+  templates:
   - name: fast-rsm_mount-files
     script:
       image: ghcr.io/p-mousley/workflows:dev_v2-2-0
