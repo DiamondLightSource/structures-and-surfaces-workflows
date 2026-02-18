@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: ClusterWorkflowTemplate
 metadata:
-  name: fast_rsm_notebook
+  name: fast-rsm-notebook
   annotations:
     workflows.argoproj.io/title: fast_rsm
     workflows.argoproj.io/description: |
@@ -11,7 +11,7 @@ metadata:
     workflows.diamond.ac.uk/ui-schema: |
       {{- .Files.Get "schemas/fast_rsm_UISchema.json" | nindent 6 }}
 spec:
-  entrypoint: fast_rsm_notebook
+  entrypoint: fast-rsm-notebook
   arguments:
     parameters:
     - name: visitdir
@@ -39,7 +39,7 @@ spec:
 
 
   templates:
-  - name: fast-rsm_mount-files
+  - name: fast-rsm-mount-files
     script:
       image: ghcr.io/p-mousley/workflows:dev_v2-2-0
       command: [bash]
@@ -51,7 +51,7 @@ spec:
           mountPath: /tmp
         
     
-  - name: run_fast-rsm_notebook
+  - name: run-fast-rsm-notebook
     script:
       image: ghcr.io/p-mousley/workflows:dev_v2-2-0
       env:
@@ -77,11 +77,11 @@ spec:
           archive:
             none: {}
 
-  - name: fast_rsm_notebook
+  - name: fast-rsm-notebook
     dag:
       tasks:
         - name: setup
-          template: fast-rsm_mount-files
-        - name: run_fast-rsm
-          template: run_fast-rsm_notebook
+          template: fast-rsm-mount-files
+        - name: run-fast-rsm
+          template: run-fast-rsm-notebook
           dependencies: [setup]
