@@ -7,9 +7,9 @@ metadata:
     workflows.argoproj.io/description: |
       utility which takes in a experimental setup file and a scan number, then performs recirpocal space mapping and saves the results to an outpath.
     workflows.diamond.ac.uk/parameter-schema: |
-      {{- .Files.Get "schema/fast_rsm_Schema.json" | nindent 6 }}
+      {{- .Files.Get "schemas/fast_rsm_Schema.json" | nindent 6 }}
     workflows.diamond.ac.uk/ui-schema: |
-      {{- .Files.Get "schema/fast_rsm_UISchema.json" | nindent 6 }}
+      {{- .Files.Get "schemas/fast_rsm_UISchema.json" | nindent 6 }}
 spec:
   entrypoint: fast_rsm_notebook
   arguments:
@@ -19,14 +19,13 @@ spec:
         configMapKeyRef:
           name: sessionspaces
           key: data_directory
-    - name: exp_setup
+    - name: exp_file
       value: /dls/science/groups/das/ExampleData/i07/fast_rsm_example_data/setups/si30563_exp.py
-    - name: calc_setup
+    - name: calc_file
       value: /dls_sw/apps/fast_rsm/v2.1.0/fast_rsm/CLI/i07/example_calc_setup.py
     - name: scan_number
       value: 432196
 
-???===========???
 volumeClaimTemplates:
 - metadata:
     name: tmp
@@ -37,7 +36,7 @@ volumeClaimTemplates:
       requests:
         storage: 20Gi
     storageClassName: netapp
-???===========???
+
 
 templates:
   - name: fast-rsm_mount-files
@@ -61,8 +60,9 @@ templates:
       command: [bash]
       source: |
           python -m papermill /tmp/notebook.ipynb /tmp/notebook.ipynb \
-            -p exp_file "{{`{{ workflow.parameters.exp_setup }}`}}" \
+            -p exp_file "{{`{{ workflow.parameters.exp_file }}`}}" \
             -p scans "{{`{{ workflow.parameters.scan_numbers }}`}}" \
+            -p calc_file "{{`{{ workflow.parameters.calc_file }}`}}" \
           python -m nbconvert --allow-errors --to html --output-dir /tmp /tmp/notebook.ipynb
       volumeMounts:
       - name: session
