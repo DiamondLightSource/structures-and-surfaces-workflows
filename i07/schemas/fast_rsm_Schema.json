@@ -1,0 +1,18 @@
+{
+  "type": "object",
+  "properties": {
+    "exp_file": {
+      "type": "string",
+      "title": "Experimental settings"
+    },
+    "calc_file": {
+      "type": "string",
+      "title": "Calculation settings"
+    },
+    "scan_numbers": {
+      "type": "integer",
+      "title": "Scan numbers"
+    }
+  },
+  "required": ["exp_file", "calc_file", "scan_numbers"]
+}

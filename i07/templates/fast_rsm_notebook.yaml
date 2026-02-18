@@ -1,0 +1,92 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ClusterWorkflowTemplate
+metadata:
+  name: fast-rsm-notebook
+  annotations:
+    workflows.argoproj.io/title: fast_rsm
+    workflows.argoproj.io/description: |
+      utility which takes in a experimental setup file and a scan number, then performs recirpocal space mapping and saves the results to an outpath.
+    workflows.diamond.ac.uk/parameter-schema: |
+      {{- .Files.Get "schemas/fast_rsm_Schema.json" | nindent 6 }}
+    workflows.diamond.ac.uk/ui-schema: |
+      {{- .Files.Get "schemas/fast_rsm_UISchema.json" | nindent 6 }}
+spec:
+  entrypoint: fast-rsm-notebook
+  arguments:
+    parameters:
+    - name: visitdir
+      valueFrom:
+        configMapKeyRef:
+          name: sessionspaces
+          key: data_directory
+    - name: exp_file
+      value: /dls/science/groups/das/ExampleData/i07/fast_rsm_example_data/setups/si30563_exp.py
+    - name: calc_file
+      value: /dls_sw/apps/fast_rsm/v2.1.0/fast_rsm/CLI/i07/example_calc_setup.py
+    - name: scan_number
+      value: 432196
+
+  volumeClaimTemplates:
+  - metadata:
+      name: tmp
+    spec:
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: 20Gi
+      storageClassName: netapp
+
+
+  templates:
+  - name: fast-rsm-mount-files
+    script:
+      image: ghcr.io/p-mousley/workflows:dev_v2-2-0
+      command: [bash]
+      source: |
+        # mount-files
+        echo '{{ .Files.Get "notebooks/scriptable_processing.ipynb" | b64enc }}' | base64 -d > /tmp/notebook.ipynb
+      volumeMounts:
+        - name: tmp
+          mountPath: /tmp
+
+        
+    
+  - name: run-fast-rsm-notebook
+    script:
+      image: ghcr.io/p-mousley/workflows:dev_v2-2-0
+      env:
+      - name: HOME
+        value: /tmp
+      command: [bash]
+      source: |
+          python -m papermill /tmp/notebook.ipynb /tmp/notebook.ipynb \
+            -p exp_file "{{`{{ workflow.parameters.exp_file }}`}}" \
+            -p scans "{{`{{ workflow.parameters.scan_numbers }}`}}" \
+            -p calc_file "{{`{{ workflow.parameters.calc_file }}`}}" \
+          python -m nbconvert --allow-errors --to html --output-dir /tmp /tmp/notebook.ipynb
+      volumeMounts:
+      - name: session
+        mountPath: "{{`{{ workflow.parameters.visitdir }}`}}"
+      - name: tmp
+        mountPath: /tmp
+      - name: exampledata
+        mountPath: /dls/science/groups/das/ExampleData/i07/fast_rsm_example_data/
+      - name: cli
+        mountPath: /dls_sw/apps/fast_rsm/v2.1.0/fast_rsm/CLI/
+
+    outputs:
+      artifacts:
+        - name: notebook
+          path: /tmp/notebook.html
+          archive:
+            none: {}
+
+  - name: fast-rsm-notebook
+    dag:
+      tasks:
+        - name: setup
+          template: fast-rsm-mount-files
+        - name: run-fast-rsm
+          template: run-fast-rsm-notebook
+          dependencies: [setup]
