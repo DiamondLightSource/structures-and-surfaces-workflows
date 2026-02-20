@@ -25,7 +25,20 @@ spec:
       value: /dls_sw/apps/fast_rsm/v2.1.0/fast_rsm/CLI/i07/example_calc_setup.py
     - name: scan_number
       value: 432196
-
+  volumes:
+    - name: session
+      hostPath:
+        path: "{{`{{ workflow.parameters.visitdir }}`}}"
+        type: Directory
+        volumes:
+    - name: exampledata
+      hostPath:
+        path: "/dls/science/groups/das/ExampleData/i07/fast_rsm_example_data/"
+        type: Directory
+    - name: cli
+      hostPath:
+        path: "/dls_sw/apps/fast_rsm/v2.1.0/fast_rsm/CLI/"
+        type: Directory
   volumeClaimTemplates:
   - metadata:
       name: tmp
