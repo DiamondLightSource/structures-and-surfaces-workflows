@@ -20,9 +20,9 @@ spec:
           name: sessionspaces
           key: data_directory
     - name: exp_file
-      value: /dls/science/groups/das/ExampleData/i07/fast_rsm_example_data/setups/si30563_exp.py
+      value: /dls/i07/data/2026/cm44146-1/ExampleData/si30563_exp.py
     - name: calc_file
-      value: /dls_sw/apps/fast_rsm/v2.1.0/fast_rsm/CLI/i07/example_calc_setup.py
+      value: /dls/i07/data/2026/cm44146-1/ExampleData/example_calc_setup.py
     - name: scan_number
       value: 432196
   volumes:
@@ -33,12 +33,9 @@ spec:
         volumes:
     - name: exampledata
       hostPath:
-        path: "/dls/science/groups/das/ExampleData/i07/fast_rsm_example_data/"
+        path: "/dls/i07/data/2026/cm44146-1/ExampleData/"
         type: Directory
-    - name: cli
-      hostPath:
-        path: "/dls_sw/apps/fast_rsm/v2.1.0/fast_rsm/CLI/"
-        type: Directory
+
   volumeClaimTemplates:
   - metadata:
       name: tmp
@@ -84,9 +81,7 @@ spec:
       - name: tmp
         mountPath: /tmp
       - name: exampledata
-        mountPath: /dls/science/groups/das/ExampleData/i07/fast_rsm_example_data/
-      - name: cli
-        mountPath: /dls_sw/apps/fast_rsm/v2.1.0/fast_rsm/CLI/
+        mountPath: /dls/i07/data/2026/cm44146-1/ExampleData/
 
     outputs:
       artifacts:
