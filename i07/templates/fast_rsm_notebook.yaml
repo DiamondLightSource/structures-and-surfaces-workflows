@@ -70,11 +70,11 @@ spec:
         value: /tmp
       command: [bash]
       source: |
-          python -m papermill /tmp/notebook.ipynb /tmp/notebook.ipynb \
+          python -m papermill /tmp/notebook.ipynb /tmp/notebook_filled.ipynb \
             -p exp_file "{{`{{ workflow.parameters.exp_file }}`}}" \
             -p scans ["{{`{{ workflow.parameters.scan_numbers }}`}}"] \
             -p calc_file "{{`{{ workflow.parameters.calc_file }}`}}" ;\
-          python -m nbconvert --allow-errors --to html --output-dir /tmp /tmp/notebook.ipynb
+          python -m nbconvert --allow-errors --to html --output-dir /tmp /tmp/notebook_filled.ipynb
       volumeMounts:
       - name: session
         mountPath: "{{`{{ workflow.parameters.visitdir }}`}}"
@@ -86,7 +86,7 @@ spec:
     outputs:
       artifacts:
         - name: notebook
-          path: /tmp/notebook.html
+          path: /tmp/notebook_filled.html
           archive:
             none: {}
     podSpecPatch: |
