@@ -72,7 +72,7 @@ spec:
       source: |
           python -m papermill /tmp/notebook.ipynb /tmp/notebook.ipynb \
             -p exp_file "{{`{{ workflow.parameters.exp_file }}`}}" \
-            -p scans "{{`{{ workflow.parameters.scan_numbers }}`}}" \
+            -p scans ["{{`{{ workflow.parameters.scan_numbers }}`}}"] \
             -p calc_file "{{`{{ workflow.parameters.calc_file }}`}}" ;\
           python -m nbconvert --allow-errors --to html --output-dir /tmp /tmp/notebook.ipynb
       volumeMounts:
