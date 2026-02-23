@@ -89,6 +89,16 @@ spec:
           path: /tmp/notebook.html
           archive:
             none: {}
+    podSpecPatch: |
+      containers:
+      - name: main
+        resources:
+          requests:
+            cpu: 10
+            memory: 30Gi
+          limits:
+            cpu: 10
+            memory: 30Gi
 
   - name: fast-rsm-notebook
     dag:
