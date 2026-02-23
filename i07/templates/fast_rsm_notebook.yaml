@@ -64,7 +64,7 @@ spec:
     
   - name: run-fast-rsm-notebook
     script:
-      image: ghcr.io/p-mousley/workflows:stable_v2-2-0
+      image: ghcr.io/p-mousley/workflows:devwf_v2-2-0
       env:
       - name: HOME
         value: /tmp
