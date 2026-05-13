@@ -2,6 +2,8 @@ apiVersion: argoproj.io/v1alpha1
 kind: ClusterWorkflowTemplate
 metadata:
   name: fast-rsm-notebook
+  labels:
+    workflows.diamond.ac.uk/science-group-surfaces: "true"
   annotations:
     workflows.argoproj.io/title: fast_rsm
     workflows.argoproj.io/description: |
@@ -10,6 +12,7 @@ metadata:
       {{- .Files.Get "schemas/fast_rsm_Schema.json" | nindent 6 }}
     workflows.diamond.ac.uk/ui-schema: |
       {{- .Files.Get "schemas/fast_rsm_UISchema.json" | nindent 6 }}
+    workflows.diamond.ac.uk/repository: https://github.com/DiamondLightSource/fast_rsm
 spec:
   entrypoint: fast-rsm-notebook
   arguments:
@@ -30,7 +33,6 @@ spec:
       hostPath:
         path: "{{`{{ workflow.parameters.visitdir }}`}}"
         type: Directory
-        volumes:
     - name: exampledata
       hostPath:
         path: "/dls/i07/data/2026/cm44146-1/ExampleData/"
