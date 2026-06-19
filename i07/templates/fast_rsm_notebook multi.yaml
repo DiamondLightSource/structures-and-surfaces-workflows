@@ -63,7 +63,7 @@ spec:
           mountPath: /tmp
 
 
-  - name: run-all-scans
+  - name: run-all-scan-lists
     steps:
     - - name: run-fast-rsm
         template: run-fast-rsm-notebook
@@ -112,11 +112,11 @@ spec:
             cpu: 10
             memory: 30Gi
 
-  - name: fast-rsm-notebook
+  - name: fast-rsm-notebook-multi
     dag:
       tasks:
         - name: setup
           template: fast-rsm-mount-files
-        - name: run-fast-rsm
-          template: run-fast-rsm-notebook
+        - name: run-all-scans
+          template: run-all-scan-lists
           dependencies: [setup]
