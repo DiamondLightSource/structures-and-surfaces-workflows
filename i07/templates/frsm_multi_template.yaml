@@ -9,9 +9,9 @@ metadata:
     workflows.argoproj.io/description: |
       utility which takes in a experimental setup file and a scan number, then performs recirpocal space mapping and saves the results to an outpath.
     workflows.diamond.ac.uk/parameter-schema: |
-      {{- .Files.Get "schemas/frm_multi_Schema.json" | nindent 6 }}
+      {{- .Files.Get "schemas/frsm_multi_Schema.json" | nindent 6 }}
     workflows.diamond.ac.uk/ui-schema: |
-      {{- .Files.Get "schemas/frm_multi_UISchema.json" | nindent 6 }}
+      {{- .Files.Get "schemas/frsm_multi_UISchema.json" | nindent 6 }}
     workflows.diamond.ac.uk/repository: https://github.com/DiamondLightSource/fast_rsm
 spec:
   entrypoint: fast-rsm-notebook-multi
