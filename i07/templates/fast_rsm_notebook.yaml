@@ -53,7 +53,7 @@ spec:
   templates:
   - name: fast-rsm-mount-files
     script:
-      image: ghcr.io/p-mousley/workflows:dev_v2-2-0
+      image: ghcr.io/diamondlightsource/workflows:devwf_v2-4-3
       command: [bash]
       source: |
         # mount-files
@@ -66,7 +66,7 @@ spec:
     
   - name: run-fast-rsm-notebook
     script:
-      image: ghcr.io/p-mousley/workflows:devwf_v2-2-0
+      image: ghcr.io/diamondlightsource/workflows:devwf_v2-4-3
       env:
       - name: HOME
         value: /tmp
