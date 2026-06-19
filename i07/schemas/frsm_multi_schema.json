@@ -1,0 +1,30 @@
+{
+  "type": "object",
+  "properties": {
+    "exp_file": {
+      "type": "string",
+      "title": "Experimental settings"
+    },
+    "calc_file": {
+      "type": "string",
+      "title": "Calculation settings"
+    },
+    "scan_numbers": {
+      "type": "integer",
+      "title": "Scan numbers"
+    }, 
+    "scanlist_command": {
+      "type": "string",
+      "title": "scan list command"
+    },
+    "scanlist_commands": {
+      "type": "array",
+      "title": "add scan list processing job queue",
+      "items": {
+        "type": "string"
+
+        }
+      }
+  },
+  "required": ["exp_file", "calc_file", "scan_numbers"]
+}
