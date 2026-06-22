@@ -26,8 +26,6 @@ spec:
       value: /dls/i07/data/2026/cm44146-1/ExampleData/si30563_exp.py
     - name: calc_file
       value: /dls/i07/data/2026/cm44146-1/ExampleData/example_calc_setup.py
-    - name: scanlist_commands
-      value: ["-s 432196"]
   volumes:
     - name: session
       hostPath:
