@@ -51,7 +51,7 @@ spec:
   templates:
     - name: fast-rsm-mount-files
       script:
-        image: ghcr.io/diamondlightsource/workflows:devwf_v2-4-3
+        image: ghcr.io/diamondlightsource/fast-rsm-workflows:devwf_v2-4-3
         command: [bash]
         source: |
           # mount-files
@@ -65,7 +65,7 @@ spec:
         parameters:
         - name: scan_list
       script:
-        image: ghcr.io/diamondlightsource/workflows:devwf_v2-4-3
+        image: ghcr.io/diamondlightsource/fast-rsm-workflows:devwf_v2-4-3
         env:
         - name: HOME
           value: /tmp
