@@ -59,15 +59,7 @@ spec:
         volumeMounts:
           - name: tmp
             mountPath: /tmp
-    - name: run-all-scan-lists
-      steps:
-      - - name: run-fast-rsm
-          template: run-fast-rsm-notebook
-          arguments:
-            parameters:
-            - name: scan_list
-              value: "{{`{{item}}`}}"
-          withParam: "{{`{{workflow.parameters.scanlist_commands}}`}}"
+
     - name: run-fast-rsm-notebook
       inputs:
         parameters:
@@ -114,6 +106,12 @@ spec:
         tasks:
           - name: setup
             template: fast-rsm-mount-files
-          - name: run-fast-rsm
-            template: run-all-scan-lists
+
+          - name: run-fast-rsm-multi
+            template: run-fast-rsm-notebook
             dependencies: [setup]
+            arguments:
+              parameters:
+              - name: scan_list
+                value: "{{`{{item}}`}}"
+            withParam: "{{`{{workflow.parameters.scanlist_commands}}`}}"
