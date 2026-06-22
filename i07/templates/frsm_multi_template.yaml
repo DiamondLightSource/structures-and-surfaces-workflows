@@ -61,8 +61,6 @@ spec:
         volumeMounts:
           - name: tmp
             mountPath: /tmp
-
-
     - name: run-all-scan-lists
       steps:
       - - name: run-fast-rsm
@@ -72,9 +70,6 @@ spec:
             - name: scan_list
               value: "{{`{{item}}`}}"
           withParam: "{{`{{workflow.parameters.scanlist_commands}}`}}"
-
-          
-      
     - name: run-fast-rsm-notebook
       inputs:
         parameters:
