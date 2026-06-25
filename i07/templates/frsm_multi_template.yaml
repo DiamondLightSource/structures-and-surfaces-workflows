@@ -75,7 +75,7 @@ spec:
               -p exp_file "{{`{{ workflow.parameters.exp_file }}`}}" \
               -p scan_list "{{`{{inputs.parameters.scan_list}}`}}" \
               -p calc_file "{{`{{ workflow.parameters.calc_file }}`}}" ;\
-            python -m nbconvert --allow-errors --to html --output-dir /tmp /tmp/notebook_filled.ipynb
+            python -m nbconvert --to html --output-dir /tmp /tmp/notebook_filled.ipynb
         volumeMounts:
         - name: session
           mountPath: "{{`{{ workflow.parameters.visitdir }}`}}"
